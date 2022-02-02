@@ -28,7 +28,7 @@ def call()
                     //   }
                     def branch = env.BRANCH_NAME
                     if (branch.startsWith('feature-') || branch == 'develop') {
-                        pipeline-ic.call(branch)
+                        pipeline-ic.call(repositoryName)
                     }
                     if (branch.startsWith('release-')){
                         pipeline-cd.call()
