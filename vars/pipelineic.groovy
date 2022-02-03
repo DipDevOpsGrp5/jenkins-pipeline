@@ -44,9 +44,9 @@ def call(repositoryName){
         ]
     }
     stage("Crear rama release"){
-        if("${env.BRANCH_NAME}" == 'develop'){
+        //if("${env.BRANCH_NAME}" == 'develop'){
             createReleaseBranch()
-        }
+        //}
     }
 }
 return this;
