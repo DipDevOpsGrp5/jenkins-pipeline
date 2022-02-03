@@ -44,7 +44,9 @@ def call(repositoryName){
         ]
     }
     stage("Crear rama release"){
-        sh 'ls'
+        def releaseName = "release-v0-0-1"
+        sh "git checkout -b " + releaseName
+        sh "git push origin " + releaseName 
     }
 }
 return this;
