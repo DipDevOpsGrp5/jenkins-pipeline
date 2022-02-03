@@ -30,7 +30,7 @@ def call()
                     println(branch)
                     echo branch
                     if (branch.startsWith('feature-') || branch == 'develop') {
-                        pipelineic.call(repositoryName)
+                        pipelineic.call("repo-name")
                     }
                     if (branch.startsWith('release-')){
                         pipelinecd.call()
