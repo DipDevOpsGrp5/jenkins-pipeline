@@ -19,7 +19,8 @@ def call(repositoryName){
             sh "echo 'Calling sonar Service in another docker container!'"
             // Run Maven on a Unix agent to execute Sonar.
             def sonarName = repositoryName + '-${env.BRANCH_NAME}-${env.BUILD_NUMBER}'
-            sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=' + sonarName
+            println(sonarName)
+            sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar -Dsonar.projectName=' + sonarName 
         }
     }
     stage("Paso 4: Subir Nexus"){
