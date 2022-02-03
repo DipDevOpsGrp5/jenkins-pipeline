@@ -5,6 +5,7 @@ def call()
       environment {
           NEXUS_USER         = credentials('NEXUS-USER')
           NEXUS_PASSWORD     = credentials('NEXUS-PASS')
+          GITHUB_TOKEN       = credentials('github_token')
       }
       parameters {
           choice(
