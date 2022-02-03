@@ -26,7 +26,7 @@ def call()
                     //           pipeline-cd.call()
                     //       break;
                     //   }
-                    def branch = ${BRANCH_NAME}
+                    def branch = ${env.BRANCH_NAME}
                     if (branch.startsWith('feature-') || branch == 'develop') {
                         pipeline-ic.call(repositoryName)
                     }
@@ -35,14 +35,14 @@ def call()
                     }
                   }
               }
-              post{
-                  success{
-                      slackSend color: 'good', message: "[Esteban Meza] [${JOB_NAME}] [${BUILD_TAG}] Ejecucion Exitosa", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-slack'
-                  }
-                  failure{
-                      slackSend color: 'danger', message: "[Esteban Meza] [${env.JOB_NAME}] [${BUILD_TAG}] Ejecucion fallida", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-slack'
-                  }
-              }
+              // post{
+              //     success{
+              //         slackSend color: 'good', message: "[Esteban Meza] [${JOB_NAME}] [${BUILD_TAG}] Ejecucion Exitosa", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-slack'
+              //     }
+              //     failure{
+              //         slackSend color: 'danger', message: "[Esteban Meza] [${env.JOB_NAME}] [${BUILD_TAG}] Ejecucion fallida", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-slack'
+              //     }
+              // }
           }
       }
   }
