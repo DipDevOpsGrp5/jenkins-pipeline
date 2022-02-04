@@ -1,19 +1,69 @@
-def call(pom_version){
+def call(pom_version, stages){
+    def stagesList = stages.split(";")
+    def listStagesOrder = [
+        'compile': 'stageCompile',
+        'test': 'stageTest',
+        'build': 'stageBuild',
+        'sonar': 'stageSonar',
+        'upload_nexus': 'stageUploadNexus',
+        'create_release_branch': 'stageCreateReleaseBranch'
+    ]
+
+    if (stages==""){
+      executeAllStages(pom_version)
+    }
+    else {
+        echo 'Stages a ejecutar :' + stages
+        listStagesOrder.each { stageName, stageFunction ->
+            stages.each{ stageToExecute ->//variable as param
+                if(stageName.equals(stageToExecute)){
+                echo 'Ejecutando ' + stageFunction
+                "${stageFunction}"()
+                }
+            }
+        }
+    }
+    
+}
+return this;
+
+def executeAllStages(pom_version){
+    stageCompile()
+    stageTest()
+    stageBuild()
+    stageSonar()
+    stageUploadNexus()
+    if("${env.BRANCH_NAME}" == 'develop'){
+      stageCreateReleaseBranch(pom_version)
+    }
+}
+
+def stageCompile() {
+    env.FAIL_STAGE = "compile"
     stage("Paso 1: Compilar"){
         sh "echo 'Compile Code!'"
         // Run Maven on a Unix agent.
         sh "mvn clean compile -e"
     }
+}
+
+def stageTest() {
     stage("Paso 2: Testear"){
         sh "echo 'Test Code!'"
         // Run Maven on a Unix agent.
         sh "mvn clean test -e"
     }
+}
+
+def stageBuild() {
     stage("Paso 3: Build .Jar"){
         sh "echo 'Build .Jar!'"
         // Run Maven on a Unix agent.
         sh "mvn clean package -e"
     }
+}
+
+def stageSonar() {
     stage("Paso 4: Análisis SonarQube"){
         withSonarQubeEnv('sonarqube') {
             sh "echo 'Calling sonar Service in another docker container!'"
@@ -23,7 +73,10 @@ def call(pom_version){
             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar -Dsonar.projectName=' + sonarName 
         }
     }
-    stage("Paso 4: Subir Nexus"){
+}
+
+def stageUploadNexus() {
+  stage("Paso 4: Subir Nexus"){
         nexusPublisher nexusInstanceId: 'nexus',
         nexusRepositoryId: 'devops-laboratorio',
         packages: [
@@ -43,12 +96,7 @@ def call(pom_version){
             ]
         ]
     }
-    if("${env.BRANCH_NAME}" == 'develop'){
-      createReleaseBranch(pom_version)
-    }
-    
 }
-return this;
 
 def createPullRequest(pom_version) {
     sh "echo 'CI pipeline success'"
@@ -65,7 +113,7 @@ def createPullRequest(pom_version) {
     """
 }
 
-def createReleaseBranch(pom_version) {
+def stageCreateReleaseBranch(pom_version) {
   stage("Crear rama release"){
     sh "echo 'CI pipeline success'"
     SHA = sh (

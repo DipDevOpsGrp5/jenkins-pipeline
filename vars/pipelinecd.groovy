@@ -1,4 +1,4 @@
-def call(){
+def call(pom_version, stages){
   stage('Git Diff'){
     // sh 'git diff $BRANCH_NAME main'
     // def pom = readMavenPom file: 'pom.xml'

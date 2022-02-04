@@ -6,6 +6,10 @@ def call()
           NEXUS_USER         = credentials('NEXUS-USER')
           NEXUS_PASSWORD     = credentials('NEXUS-PASS')
           GITHUB_TOKEN       = credentials('token_github')
+          
+      }
+      parameters {
+        text description: 'Enviar los stages separados por ";" ... vacío si necesita todos los stages', name: 'stages'
       }
       stages {
           stage("Pipeline"){
@@ -23,13 +27,14 @@ def call()
                     def branch = "${env.BRANCH_NAME}"
                     def pom = readMavenPom file: 'pom.xml'
                     def pom_version = pom.version
+                    env.FAIL_STAGE=""
                     println(branch)
                     echo branch
                     if (branch.startsWith('feature-') || branch == 'develop') {
-                        pipelineic.call(pom_version)
+                        pipelineic.call(pom_version, params.stages)
                     }
                     if (branch.startsWith('release-')){
-                        pipelinecd.call(pom_version)
+                        pipelinecd.call(pom_version, params.stages)
                     }
                   }
               }
