@@ -1,4 +1,4 @@
-def call(repositoryName){
+def call(pom_version){
     stage("Paso 1: Compilar"){
         sh "echo 'Compile Code!'"
         // Run Maven on a Unix agent.
@@ -18,7 +18,7 @@ def call(repositoryName){
         withSonarQubeEnv('sonarqube') {
             sh "echo 'Calling sonar Service in another docker container!'"
             // Run Maven on a Unix agent to execute Sonar.
-            def sonarName = repositoryName + "-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+            def sonarName = "repositoryName" + "-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
             println(sonarName)
             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar -Dsonar.projectName=' + sonarName 
         }
@@ -31,14 +31,14 @@ def call(repositoryName){
                 mavenAssetList: [
                     [classifier: '',
                     extension: 'jar',
-                    filePath: 'build/DevOpsUsach2020-0.0.1.jar'
+                    filePath: "build/DevOpsUsach2020-${pom_version}.jar"
                 ]
             ],
                 mavenCoordinate: [
                     artifactId: 'DevOpsUsach2020',
                     groupId: 'com.devopsusach2020',
                     packaging: 'jar',
-                    version: '0.0.1'
+                    version: "${pom_version}"
                 ]
             ]
         ]

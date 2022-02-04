@@ -6,7 +6,6 @@ def call()
           NEXUS_USER         = credentials('NEXUS-USER')
           NEXUS_PASSWORD     = credentials('NEXUS-PASS')
           GITHUB_TOKEN       = credentials('token_github')
-          POM_VERSION        = "test"
       }
       stages {
           stage("Pipeline"){
@@ -22,18 +21,15 @@ def call()
                     //       break;
                     //   }
                     def branch = "${env.BRANCH_NAME}"
-                    // e
                     def pom = readMavenPom file: 'pom.xml'
-                    echo pom.version
+                    def pom_version = pom.version
                     println(branch)
                     echo branch
                     if (branch.startsWith('feature-') || branch == 'develop') {
-                        pipelinecd.call()
-                        //pipelineic.call("repo-name")
+                        pipelineic.call(pom_version)
                     }
                     if (branch.startsWith('release-')){
-                        def version = branch.replace('release-', '')
-                        pipelinecd.call()//version)
+                        pipelinecd.call(pom_version)
                     }
                   }
               }
