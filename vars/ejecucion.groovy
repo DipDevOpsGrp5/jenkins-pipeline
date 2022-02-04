@@ -15,20 +15,11 @@ def call()
           stage("Pipeline"){
               steps {
                   script{
-                    // switch(params.pipeline)
-                    //   {
-                    //       case 'pipeline-IC':
-                    //           pipeline-ic.call()
-                    //       break;
-                    //       case 'pipeline-CD':
-                    //           pipeline-cd.call()
-                    //       break;
-                    //   }
                     def branch = "${env.BRANCH_NAME}"
                     def pom = readMavenPom file: 'pom.xml'
                     def pom_version = pom.version
                     env.POM_VERSION = pom.version
-                    env.STAGE=""
+                    env.STAGE="" // Usar este para mensaje slack
                     env.DESCRIPTION_STAGE=""
                     println(branch)
                     echo branch

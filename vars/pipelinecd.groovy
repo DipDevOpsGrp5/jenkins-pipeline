@@ -1,30 +1,106 @@
-def call(pom_version, stages){
-  stage('Git Diff'){
-    // sh 'git diff $BRANCH_NAME main'
-    // def pom = readMavenPom file: 'pom.xml'
-    // def POM_VERSION = pom.version
+def call(stages){
+  def stagesList = stages.split(";")
+  def listStagesOrder = [
+      'git_diff': 'stageGitDiff',
+      'download_nexus': 'stageDownloadNexus',
+      'run_jar': 'stageRunJar',
+      'curl_jar': 'stageCurlJar',
+      'merge_main': 'stageMergeMain',
+      'merge_develop': 'stageMergeDevelop',
+      'tag_main': 'stageTagMain'
+  ]
 
-    // echo "$POM_VERSION"
-    echo env.POM_VERSION
+  if (stages==""){
+    executeAllStages()
   }
-  stage("Paso 5: Descargar Nexus"){
-      sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-laboratorio/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
+  else {
+    echo 'Stages a ejecutar :' + stages
+    listStagesOrder.each { stageName, stageFunction ->
+      stagesList.each{ stageToExecute ->//variable as param
+        if(stageName.equals(stageToExecute)){
+          echo 'Ejecutando ' + stageFunction
+          "${stageFunction}"()
+        }
+      }
+    }
+  } 
+}
+return this;
+
+def executeAllStages(){
+  echo "Ejecutando todos los stages..."
+  stageGitDiff();
+  stageDownloadNexus();
+  stageRunJar();
+  stageCurlJar();
+  stageMergeMain();
+  stageMergeDevelop();
+  stageTagMain();
+}
+
+def stageGitDiff(){
+    env.DESCRIPTION_STAGE = "Paso 0: Git Diff"
+    stage("${env.DESCRIPTION_STAGE}"){
+      env.STAGE = "git_diff - ${env.DESCRIPTION_STAGE}"
+      sh "echo  ${env.STAGE}"
+      // TODO: ingresar código de git diff
+      }
+
+}
+
+def stageDownloadNexus(){
+    env.DESCRIPTION_STAGE = "Paso 1: Descargar Nexus"
+    stage("${env.DESCRIPTION_STAGE}"){
+      env.STAGE = "download_nexus - ${env.DESCRIPTION_STAGE}"
+      sh "echo  ${env.STAGE}"
+      sh "curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD 'http://nexus:8081/repository/devops-laboratorio/com/devopsusach2020/DevOpsUsach2020/${env.POM_VERSION}/DevOpsUsach2020-${env.POM_VERSION}.jar' -O"
+    }
+}
+
+def stageRunJar(){
+    env.DESCRIPTION_STAGE = "Paso 2: Descargar Nexus"
+    stage("${env.DESCRIPTION_STAGE}"){
+      env.STAGE = "run_jar - ${env.DESCRIPTION_STAGE}"
+      sh "echo  ${env.STAGE}"
+      sh 'nohup java -jar DevOpsUsach2020-${env.POM_VERSION}.jar & >/dev/null'
   }
-  stage("Paso 6: Levantar Artefacto Jar"){
-      sh 'nohup java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
-  }
-  stage("Paso 7: Testear Artefacto - Dormir(Esperar 20sg) "){
+}
+
+def stageCurlJar(){
+    env.DESCRIPTION_STAGE = "Paso 3: Testear Artefacto - Dormir(Esperar 20sg)"
+    stage("${env.DESCRIPTION_STAGE}"){
+      env.STAGE = "curl_jar - ${env.DESCRIPTION_STAGE}"
+      sh "echo  ${env.STAGE}"
       sh "sleep 20 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
   }
-  stage("Merge main"){
-    //mergeBranch(main)
-  }
-  stage("Merge develop"){
-    //mergeBranch(develop)
-  }
-  stage("Tag main"){
+}
 
-  }
+def stageMergeMain(){
+    env.DESCRIPTION_STAGE = "Paso 4: Merge a main"
+    stage("${env.DESCRIPTION_STAGE}"){
+      env.STAGE = "merge_main - ${env.DESCRIPTION_STAGE}"
+      sh "echo  ${env.STAGE}"
+      mergeBranch("main")
+    }
+}
+
+def stageMergeDevelop(){
+    env.DESCRIPTION_STAGE = "Paso 4: Merge a develop"
+    stage("${env.DESCRIPTION_STAGE}"){
+      env.STAGE = "merge_develop - ${env.DESCRIPTION_STAGE}"
+      sh "echo  ${env.STAGE}"
+      mergeBranch("main")
+    }
+}
+
+def stageTagMain(){
+    env.DESCRIPTION_STAGE = "Paso 4: Tag main"
+    stage("${env.DESCRIPTION_STAGE}"){
+      env.STAGE = "tag_main - ${env.DESCRIPTION_STAGE}"
+      sh "echo  ${env.STAGE}"
+      sh "echo  ${env.POM_VERSION}"
+      // tagMainBranch()
+    }
 }
 
 
