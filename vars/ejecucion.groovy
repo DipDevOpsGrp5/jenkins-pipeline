@@ -6,7 +6,7 @@ def call()
           NEXUS_USER         = credentials('NEXUS-USER')
           NEXUS_PASSWORD     = credentials('NEXUS-PASS')
           GITHUB_TOKEN       = credentials('token_github')
-          POM_VERSION        = ""
+          POM_VERSION        = "test"
       }
       stages {
           stage("Pipeline"){
@@ -22,8 +22,9 @@ def call()
                     //       break;
                     //   }
                     def branch = "${env.BRANCH_NAME}"
-                    def pom = readMavenPom file: 'pom.xml'
-                    env.POM_VERSION = pom.version
+                    // e
+                    // def pom = readMavenPom file: 'pom.xml'
+                    // env.POM_VERSION = pom.version
                     echo env.POM_VERSION
                     println(branch)
                     echo branch
