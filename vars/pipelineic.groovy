@@ -1,6 +1,5 @@
 def call(repositoryName){
     stage("Paso 1: Compilar"){
-        sh "${POM_VERSION}"
         sh "echo 'Compile Code!'"
         // Run Maven on a Unix agent.
         sh "mvn clean compile -e"
@@ -45,9 +44,9 @@ def call(repositoryName){
         ]
     }
     stage("Crear rama release"){
-        //if("${env.BRANCH_NAME}" == 'develop'){
+        if("${env.BRANCH_NAME}" == 'develop'){
             createReleaseBranch()
-        //}
+        }
     }
 }
 return this;
