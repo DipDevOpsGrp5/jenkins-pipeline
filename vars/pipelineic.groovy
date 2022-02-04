@@ -41,8 +41,8 @@ def executeAllStages(pom_version){
 
 def stageCompile() {
     env.DESCRIPTION_STAGE = "Paso 1: Compilar"
-    stage("${env.DESCRTIPTION_STAGE}"){
-        env.STAGE = "compile - ${env.DESCRTIPTION_STAGE}"
+    stage("${env.DESCRIPTION_STAGE}"){
+        env.STAGE = "compile - ${env.DESCRIPTION_STAGE}"
         sh "echo  ${env.STAGE}"
         sh "mvn clean compile -e"
     }
@@ -50,8 +50,8 @@ def stageCompile() {
 
 def stageTest() {
     env.DESCRIPTION_STAGE = "Paso 2: Testear"
-    stage("${env.DESCRTIPTION_STAGE}"){
-        env.STAGE = "test - ${env.DESCRTIPTION_STAGE}"
+    stage("${env.DESCRIPTION_STAGE}"){
+        env.STAGE = "test - ${env.DESCRIPTION_STAGE}"
         sh "echo  ${env.STAGE}"
         sh "mvn clean test -e"
     }
@@ -59,8 +59,8 @@ def stageTest() {
 
 def stageBuild() {
     env.DESCRIPTION_STAGE = "Paso 3: Build jar"
-    stage("${env.DESCRTIPTION_STAGE}"){
-        env.STAGE = "build - ${env.DESCRTIPTION_STAGE}"
+    stage("${env.DESCRIPTION_STAGE}"){
+        env.STAGE = "build - ${env.DESCRIPTION_STAGE}"
         sh "echo  ${env.STAGE}"
         sh "mvn clean package -e"
     }
@@ -68,8 +68,8 @@ def stageBuild() {
 
 def stageSonar() {
     env.DESCRIPTION_STAGE = "Paso 4: Análisis SonarQube"
-    stage("${env.DESCRTIPTION_STAGE}"){
-        env.STAGE = "sonar - ${env.DESCRTIPTION_STAGE}"
+    stage("${env.DESCRIPTION_STAGE}"){
+        env.STAGE = "sonar - ${env.DESCRIPTION_STAGE}"
         withSonarQubeEnv('sonarqube') {
             sh "echo  ${env.STAGE}"
             def sonarName = "repositoryName" + "-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
@@ -81,8 +81,8 @@ def stageSonar() {
 
 def stageUploadNexus() {
   env.DESCRIPTION_STAGE = "Paso 5: Subir Nexus"
-  stage("${env.DESCRTIPTION_STAGE}"){
-        env.STAGE = "upload_nexus - ${env.DESCRTIPTION_STAGE}"
+  stage("${env.DESCRIPTION_STAGE}"){
+        env.STAGE = "upload_nexus - ${env.DESCRIPTION_STAGE}"
         sh "echo  ${env.STAGE}"
         nexusPublisher nexusInstanceId: 'nexus',
         nexusRepositoryId: 'devops-laboratorio',
@@ -122,8 +122,8 @@ def createPullRequest(pom_version) {
 
 def stageCreateReleaseBranch(pom_version) {
   env.DESCRIPTION_STAGE = "Paso 6: Crear rama release"
-  stage("Crear rama release"){
-    env.STAGE = "create_release_branch - ${env.DESCRTIPTION_STAGE}"
+  stage("${env.DESCRIPTION_STAGE}"){
+    env.STAGE = "create_release_branch - ${env.DESCRIPTION_STAGE}"
     sh "echo  ${env.STAGE}"
     SHA = sh (
         script:
