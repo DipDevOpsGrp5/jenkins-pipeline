@@ -27,6 +27,7 @@ def call()
                     def branch = "${env.BRANCH_NAME}"
                     def pom = readMavenPom file: 'pom.xml'
                     def pom_version = pom.version
+                    env.POM_VERSION = pom.version
                     env.STAGE=""
                     env.DESCRIPTION_STAGE=""
                     println(branch)
