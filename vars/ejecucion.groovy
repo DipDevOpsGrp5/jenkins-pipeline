@@ -23,10 +23,8 @@ def call()
                     //   }
                     def branch = "${env.BRANCH_NAME}"
                     // e
-                    // def pom = readMavenPom file: 'pom.xml'
-                    echo env.POM_VERSION
-                    env.POM_VERSION = "modificado"
-                    echo env.POM_VERSION
+                    def pom = readMavenPom file: 'pom.xml'
+                    echo pom.version
                     println(branch)
                     echo branch
                     if (branch.startsWith('feature-') || branch == 'develop') {
