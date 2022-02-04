@@ -66,23 +66,23 @@ def createPullRequest() {
     """
 }
 
-def createReleaseBranch() {
-    sh "echo 'CI pipeline success'"
-    SHA = sh (
-        script:
-            """
-                curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs/heads/$BRANCH_NAME | jq -r '.object.sha'
-            """,
-        returnStdout: true
-    ).trim()
+// def createReleaseBranch() {
+//     sh "echo 'CI pipeline success'"
+//     SHA = sh (
+//         script:
+//             """
+//                 curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs/heads/$BRANCH_NAME | jq -r '.object.sha'
+//             """,
+//         returnStdout: true
+//     ).trim()
 
-    print (SHA)
-    // def branchName = ARTIFACT_VERSION.replaceAll("\\.","-")
-    def branchVersion = ""
-    sh (
-        script:
-        """
-            curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN"  https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs -d '{"ref": "refs/heads/release-v$branchVersion", "sha": "$SHA"}'
-        """,
-    )
-}
+//     print (SHA)
+//     // def branchName = ARTIFACT_VERSION.replaceAll("\\.","-")
+//     def branchVersion = ""
+//     sh (
+//         script:
+//         """
+//             curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN"  https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs -d '{"ref": "refs/heads/release-v$branchVersion", "sha": "$SHA"}'
+//         """,
+//     )
+// }
