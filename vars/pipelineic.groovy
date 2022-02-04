@@ -14,7 +14,7 @@ def call(pom_version, stages){
     }
     else {
         echo 'Stages a ejecutar :' + stages
-        listStagesOrder.each { stageName, stageFunction ->
+        stages.each { stageName, stageFunction ->
             stages.each{ stageToExecute ->//variable as param
                 if(stageName.equals(stageToExecute)){
                 echo 'Ejecutando ' + stageFunction
@@ -39,7 +39,7 @@ def executeAllStages(pom_version){
 }
 
 def stageCompile() {
-    env.FAIL_STAGE = "compile"
+    env.STAGE = "compile"
     stage("Paso 1: Compilar"){
         sh "echo 'Compile Code!'"
         // Run Maven on a Unix agent.
