@@ -43,20 +43,19 @@ def call(pom_version){
             ]
         ]
     }
-    stage("Crear rama release"){
-        //if("${env.BRANCH_NAME}" == 'develop'){
-            createReleaseBranch(pom_version)
-        //}
+    if("${env.BRANCH_NAME}" == 'develop'){
+      createReleaseBranch()
     }
+    
 }
 return this;
 
-def createPullRequest() {
+def createPullRequest(pom_version) {
     sh "echo 'CI pipeline success'"
     PR_NUMBER = sh (
         script: 
             """
-                curl -X POST -d '{"title":"$COMMIT_MSG", "body": "$ARTIFACT_VERSION", "head":"$BRANCH_NAME","base":"develop"}' -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/pulls | jq '.number'
+                curl -X POST -d '{"title":"PR branch $BRANCH_NAME", "body": "$pom_version", "head":"$BRANCH_NAME","base":"develop"}' -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/pulls | jq '.number'
             """,
         returnStdout: true
     ).trim()
@@ -67,6 +66,7 @@ def createPullRequest() {
 }
 
 def createReleaseBranch(pom_version) {
+  stage("Crear rama release"){
     sh "echo 'CI pipeline success'"
     SHA = sh (
         script:
@@ -84,4 +84,5 @@ def createReleaseBranch(pom_version) {
             curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN"  https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs -d '{"ref": "refs/heads/release-v$branchVersion", "sha": "$SHA"}'
         """,
     )
+  }
 }
