@@ -71,7 +71,7 @@ def createReleaseBranch() {
     SHA = sh (
         script:
             """
-                curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/git/refs/heads/$BRANCH_NAME | jq -r '.object.sha'
+                curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs/heads/$BRANCH_NAME | jq -r '.object.sha'
             """,
         returnStdout: true
     ).trim()
