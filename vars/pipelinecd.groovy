@@ -1,9 +1,10 @@
 def call(){
   stage('Git Diff'){
     // sh 'git diff $BRANCH_NAME main'
-    def pom = readMavenPom file: 'pom.xml'
-    def POM_VERSION = pom.version
+    // def pom = readMavenPom file: 'pom.xml'
+    // def POM_VERSION = pom.version
 
+    // echo "$POM_VERSION"
     echo "$POM_VERSION"
   }
   stage("Paso 5: Descargar Nexus"){

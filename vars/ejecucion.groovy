@@ -6,6 +6,7 @@ def call()
           NEXUS_USER         = credentials('NEXUS-USER')
           NEXUS_PASSWORD     = credentials('NEXUS-PASS')
           GITHUB_TOKEN       = credentials('token_github')
+          POM_VERSION        = ""
       }
       stages {
           stage("Pipeline"){
@@ -21,6 +22,8 @@ def call()
                     //       break;
                     //   }
                     def branch = "${env.BRANCH_NAME}"
+                    def pom = readMavenPom file: 'pom.xml'
+                    env.POM_VERSION = pom.version
                     println(branch)
                     echo branch
                     if (branch.startsWith('feature-') || branch == 'develop') {
