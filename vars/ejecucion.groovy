@@ -24,7 +24,8 @@ def call()
                     println(branch)
                     echo branch
                     if (branch.startsWith('feature-') || branch == 'develop') {
-                        pipelineic.call("repo-name")
+                        pipelinecd.call()
+                        //pipelineic.call("repo-name")
                     }
                     if (branch.startsWith('release-')){
                         def version = branch.replace('release-', '')
