@@ -1,4 +1,4 @@
-def call(pom_version, stages){
+def call(stages){
     def stagesList = stages.split(";")
     def listStagesOrder = [
         'compile': 'stageCompile',
@@ -10,7 +10,7 @@ def call(pom_version, stages){
     ]
 
     if (stages==""){
-      executeAllStages(pom_version)
+      executeAllStages()
     }
     else {
         echo 'Stages a ejecutar :' + stages
@@ -27,7 +27,7 @@ def call(pom_version, stages){
 }
 return this;
 
-def executeAllStages(pom_version){
+def executeAllStages(){
     echo "Ejecutando todos los stages..."
     stageCompile()
     stageTest()
@@ -35,7 +35,7 @@ def executeAllStages(pom_version){
     stageSonar()
     stageUploadNexus()
     if("${env.BRANCH_NAME}" == 'develop'){
-      stageCreateReleaseBranch(pom_version)
+      stageCreateReleaseBranch()
     }
 }
 
@@ -105,12 +105,13 @@ def stageUploadNexus() {
     }
 }
 
-def createPullRequest(pom_version) {
+def createPullRequest(
+) {
     sh "echo 'CI pipeline success'"
     PR_NUMBER = sh (
         script: 
             """
-                curl -X POST -d '{"title":"PR branch $BRANCH_NAME", "body": "$pom_version", "head":"$BRANCH_NAME","base":"develop"}' -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/pulls | jq '.number'
+                curl -X POST -d '{"title":"PR branch $BRANCH_NAME", "body": "$env.POM_VERSION", "head":"$BRANCH_NAME","base":"develop"}' -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/pulls | jq '.number'
             """,
         returnStdout: true
     ).trim()
@@ -120,7 +121,7 @@ def createPullRequest(pom_version) {
     """
 }
 
-def stageCreateReleaseBranch(pom_version) {
+def stageCreateReleaseBranch() {
   env.DESCRIPTION_STAGE = "Paso 6: Crear rama release"
   stage("${env.DESCRIPTION_STAGE}"){
     env.STAGE = "create_release_branch - ${env.DESCRIPTION_STAGE}"
@@ -134,7 +135,7 @@ def stageCreateReleaseBranch(pom_version) {
     ).trim()
 
     print (SHA)
-    def branchVersion = pom_version.replaceAll("\\.","-")
+    def branchVersion = env.POM_VERSION.replaceAll("\\.","-")
     sh (
         script:
         """

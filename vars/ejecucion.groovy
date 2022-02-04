@@ -33,10 +33,10 @@ def call()
                     println(branch)
                     echo branch
                     if (branch.startsWith('feature-') || branch == 'develop') {
-                        pipelineic.call(pom_version, params.stages)
+                        pipelineic.call(params.stages)
                     }
                     if (branch.startsWith('release-')){
-                        pipelinecd.call(pom_version, params.stages)
+                        pipelinecd.call(params.stages)
                     }
                   }
               }
