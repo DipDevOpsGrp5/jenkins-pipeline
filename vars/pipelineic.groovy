@@ -15,7 +15,7 @@ def call(pom_version, stages){
     else {
         echo 'Stages a ejecutar :' + stages
         listStagesOrder.each { stageName, stageFunction ->
-            stages.each{ stageToExecute ->//variable as param
+            stagesList.each{ stageToExecute ->//variable as param
                 if(stageName.equals(stageToExecute)){
                   echo 'Ejecutando ' + stageFunction
                   "${stageFunction}"()
