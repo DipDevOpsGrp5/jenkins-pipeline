@@ -44,7 +44,7 @@ def call(pom_version){
         ]
     }
     if("${env.BRANCH_NAME}" == 'develop'){
-      createReleaseBranch()
+      createReleaseBranch(pom_version)
     }
     
 }
