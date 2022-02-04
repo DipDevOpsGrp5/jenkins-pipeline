@@ -7,13 +7,6 @@ def call()
           NEXUS_PASSWORD     = credentials('NEXUS-PASS')
           GITHUB_TOKEN       = credentials('token_github')
       }
-      parameters {
-          choice(
-              name:'pipeline',
-              choices: ['pipeline-IC', 'pipeline-CD'],
-              description: 'Seleccione pipeline'
-          )
-      }
       stages {
           stage("Pipeline"){
               steps {
@@ -34,7 +27,8 @@ def call()
                         pipelineic.call("repo-name")
                     }
                     if (branch.startsWith('release-')){
-                        pipelinecd.call()
+                        def version = branch.replace('release-', '')
+                        pipelinecd.call()//version)
                     }
                   }
               }

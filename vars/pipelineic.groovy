@@ -1,5 +1,6 @@
 def call(repositoryName){
     stage("Paso 1: Compilar"){
+        sh "${POM_VERSION}"
         sh "echo 'Compile Code!'"
         // Run Maven on a Unix agent.
         sh "mvn clean compile -e"
@@ -78,11 +79,11 @@ def createReleaseBranch() {
 
     print (SHA)
     // def branchName = ARTIFACT_VERSION.replaceAll("\\.","-")
-    def branchName = ""
+    def branchVersion = ""
     sh (
         script:
         """
-            curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN"  https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs -d '{"ref": "refs/heads/release-v$branchName", "sha": "$SHA"}'
+            curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN"  https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs -d '{"ref": "refs/heads/release-v$branchVersion", "sha": "$SHA"}'
         """,
     )
 }
