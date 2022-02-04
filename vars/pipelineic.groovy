@@ -82,7 +82,7 @@ def createReleaseBranch() {
     sh (
         script:
         """
-            curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN"  https://api.github.com/repos/DipDevOpsGrp5/git/refs -d '{"ref": "refs/heads/release-v$branchName", "sha": "$SHA"}'
+            curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN"  https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs -d '{"ref": "refs/heads/release-v$branchName", "sha": "$SHA"}'
         """,
     )
 }
