@@ -44,9 +44,9 @@ def call(pom_version){
         ]
     }
     stage("Crear rama release"){
-        if("${env.BRANCH_NAME}" == 'develop'){
-            createReleaseBranch()
-        }
+        //if("${env.BRANCH_NAME}" == 'develop'){
+            createReleaseBranch(pom_version)
+        //}
     }
 }
 return this;
@@ -66,7 +66,7 @@ def createPullRequest() {
     """
 }
 
-def createReleaseBranch() {
+def createReleaseBranch(pom_version) {
     sh "echo 'CI pipeline success'"
     SHA = sh (
         script:
@@ -77,8 +77,7 @@ def createReleaseBranch() {
     ).trim()
 
     print (SHA)
-    // def branchName = ARTIFACT_VERSION.replaceAll("\\.","-")
-    def branchVersion = ""
+    def branchVersion = pom_version.replaceAll("\\.","-")
     sh (
         script:
         """
