@@ -2,8 +2,9 @@ def call(){
   stage('Git Diff'){
     // sh 'git diff $BRANCH_NAME main'
     def pom = readMavenPom file: 'pom.xml'
+    def POM_VERSION = pom.version
 
-    sh "$pom.version"
+    echo "$POM_VERSION"
   }
   stage("Paso 5: Descargar Nexus"){
       sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-laboratorio/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
