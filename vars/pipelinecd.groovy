@@ -13,10 +13,10 @@ def call(){
       sh "sleep 20 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
   }
   stage("Merge main"){
-    mergeBranch(main)
+    //mergeBranch(main)
   }
   stage("Merge develop"){
-    mergeBranch(develop)
+    //mergeBranch(develop)
   }
   stage("Tag main"){
 
