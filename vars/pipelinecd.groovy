@@ -5,7 +5,7 @@ def call(){
     // def POM_VERSION = pom.version
 
     // echo "$POM_VERSION"
-    echo env.POM_VERSION
+    echo ${env.POM_VERSION}
   }
   stage("Paso 5: Descargar Nexus"){
       sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-laboratorio/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
