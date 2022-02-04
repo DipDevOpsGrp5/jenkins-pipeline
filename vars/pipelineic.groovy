@@ -40,35 +40,38 @@ def executeAllStages(pom_version){
 }
 
 def stageCompile() {
-    env.STAGE = "compile"
-    stage("Paso 1: Compilar"){
-        sh "echo 'Compile Code!'"
-        // Run Maven on a Unix agent.
+    env.DESCRIPTION_STAGE = "Paso 1: Compilar"
+    stage("${env.DESCRTIPTION_STAGE}"){
+        env.STAGE = "compile - ${env.DESCRTIPTION_STAGE}"
+        sh "echo  ${env.STAGE}"
         sh "mvn clean compile -e"
     }
 }
 
 def stageTest() {
-    stage("Paso 2: Testear"){
-        sh "echo 'Test Code!'"
-        // Run Maven on a Unix agent.
+    env.DESCRIPTION_STAGE = "Paso 2: Testear"
+    stage("${env.DESCRTIPTION_STAGE}"){
+        env.STAGE = "test - ${env.DESCRTIPTION_STAGE}"
+        sh "echo  ${env.STAGE}"
         sh "mvn clean test -e"
     }
 }
 
 def stageBuild() {
-    stage("Paso 3: Build .Jar"){
-        sh "echo 'Build .Jar!'"
-        // Run Maven on a Unix agent.
+    env.DESCRIPTION_STAGE = "Paso 3: Build jar"
+    stage("${env.DESCRTIPTION_STAGE}"){
+        env.STAGE = "build - ${env.DESCRTIPTION_STAGE}"
+        sh "echo  ${env.STAGE}"
         sh "mvn clean package -e"
     }
 }
 
 def stageSonar() {
-    stage("Paso 4: Análisis SonarQube"){
+    env.DESCRIPTION_STAGE = "Paso 4: Análisis SonarQube"
+    stage("${env.DESCRTIPTION_STAGE}"){
+        env.STAGE = "sonar - ${env.DESCRTIPTION_STAGE}"
         withSonarQubeEnv('sonarqube') {
-            sh "echo 'Calling sonar Service in another docker container!'"
-            // Run Maven on a Unix agent to execute Sonar.
+            sh "echo  ${env.STAGE}"
             def sonarName = "repositoryName" + "-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
             println(sonarName)
             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar -Dsonar.projectName=' + sonarName 
@@ -77,7 +80,10 @@ def stageSonar() {
 }
 
 def stageUploadNexus() {
-  stage("Paso 4: Subir Nexus"){
+  env.DESCRIPTION_STAGE = "Paso 5: Subir Nexus"
+  stage("${env.DESCRTIPTION_STAGE}"){
+        env.STAGE = "upload_nexus - ${env.DESCRTIPTION_STAGE}"
+        sh "echo  ${env.STAGE}"
         nexusPublisher nexusInstanceId: 'nexus',
         nexusRepositoryId: 'devops-laboratorio',
         packages: [
@@ -115,8 +121,10 @@ def createPullRequest(pom_version) {
 }
 
 def stageCreateReleaseBranch(pom_version) {
+  env.DESCRIPTION_STAGE = "Paso 6: Crear rama release"
   stage("Crear rama release"){
-    sh "echo 'CI pipeline success'"
+    env.STAGE = "create_release_branch - ${env.DESCRTIPTION_STAGE}"
+    sh "echo  ${env.STAGE}"
     SHA = sh (
         script:
             """
