@@ -70,9 +70,11 @@ def stageSonar() {
     env.DESCRIPTION_STAGE = "Paso 4: Análisis SonarQube"
     stage("${env.DESCRIPTION_STAGE}"){
         env.STAGE = "sonar - ${env.DESCRIPTION_STAGE}"
+        repoName = env.GIT_URL.tokenize('/')[3].split("\\.")[0]
+        println(repoName)
         withSonarQubeEnv('sonarqube') {
             sh "echo  ${env.STAGE}"
-            def sonarName = "repositoryName" + "-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+            def sonarName = "${repoName}-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
             println(sonarName)
             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar -Dsonar.projectName=' + sonarName 
         }
