@@ -43,7 +43,7 @@ def stageGitDiff(){
     stage("${env.DESCRIPTION_STAGE}"){
       env.STAGE = "git_diff - ${env.DESCRIPTION_STAGE}"
       sh "echo  ${env.STAGE}"
-      // TODO: ingresar código de git diff
+      sh "git diff origin/main"
       }
 
 }
