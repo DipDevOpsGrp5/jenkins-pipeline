@@ -127,7 +127,7 @@ def tagMainBranch() {
         script:
             """
                 curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs/heads/main | jq -r '.object.sha'
-            """
+            """,
         returnStdout: true
     ).trim()
 
