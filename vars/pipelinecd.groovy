@@ -58,11 +58,11 @@ def stageDownloadNexus(){
 }
 
 def stageRunJar(){
-    env.DESCRIPTION_STAGE = "Paso 2: Descargar Nexus"
+    env.DESCRIPTION_STAGE = "Paso 2: Correr Jar"
     stage("${env.DESCRIPTION_STAGE}"){
       env.STAGE = "run_jar - ${env.DESCRIPTION_STAGE}"
       sh "echo  ${env.STAGE}"
-      sh 'nohup java -jar DevOpsUsach2020-${env.POM_VERSION}.jar & >/dev/null'
+      sh "nohup java -jar DevOpsUsach2020-${env.POM_VERSION}.jar & >/dev/null"
   }
 }
 
