@@ -67,7 +67,7 @@ def stageRunJar(){
 }
 
 def stageCurlJar(){
-    env.DESCRIPTION_STAGE = "Paso 3: Testear Artefacto - Dormir(Esperar 20sg)"
+    env.DESCRIPTION_STAGE = "Paso 3: Testear Artefacto - Dormir 20sg"
     stage("${env.DESCRIPTION_STAGE}"){
       env.STAGE = "curl_jar - ${env.DESCRIPTION_STAGE}"
       sh "echo  ${env.STAGE}"
