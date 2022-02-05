@@ -33,12 +33,16 @@ def call()
               }
               post{
                   success{
+                    script{
                       slack.call('PASS')
                       //slackSend color: 'good', message: "[Esteban Meza] [${JOB_NAME}] [${BUILD_TAG}] Ejecucion Exitosa", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-slack'
+                    }
                   }
                   failure{
+                    script{
                       slack.call('FAIL')
                       //slackSend color: 'danger', message: "[Esteban Meza] [${env.JOB_NAME}] [${BUILD_TAG}] Ejecucion fallida", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-slack'
+                    }
                   }
               }
           }
