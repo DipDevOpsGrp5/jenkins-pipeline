@@ -99,7 +99,7 @@ def stageTagMain(){
       env.STAGE = "tag_main - ${env.DESCRIPTION_STAGE}"
       sh "echo  ${env.STAGE}"
       sh "echo  ${env.POM_VERSION}"
-      // tagMainBranch()
+      tagMainBranch()
     }
 }
 
@@ -121,30 +121,30 @@ def mergeBranch(String baseBranch) {
     """
 }
 
-// def tagMainBranch() {
-//     print ("tagging main branch")
-//     SHA = sh (
-//         script:
-//             """
-//                 curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs/heads/main | jq -r '.object.sha'
-//             """
-//         returnStdout: true
-//     ).trim()
+def tagMainBranch() {
+    print ("tagging main branch")
+    SHA = sh (
+        script:
+            """
+                curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs/heads/main | jq -r '.object.sha'
+            """
+        returnStdout: true
+    ).trim()
 
-//     print (SHA)
+    print (SHA)
 
-//     SHA_TAG = sh (
-//         script:
-//         """
-//             curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/tags -d '{"tag":"$ARTIFACT_VERSION", "message":"$ARTIFACT_VERSION", "object": "$SHA", "type": "commit"}' | jq -r '.sha'
-//         """,
-//         returnStdout: true
+    SHA_TAG = sh (
+        script:
+        """
+            curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/tags -d '{"tag":"$env.POM_VERSION", "message":"$env.POM_VERSION", "object": "$SHA", "type": "commit"}' | jq -r '.sha'
+        """,
+        returnStdout: true
 
-//     ).trim()
+    ).trim()
 
-//     print('SHA_TAG: ' + SHA_TAG)
+    print('SHA_TAG: ' + SHA_TAG)
 
-//     sh """
-//         curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs -d '{"ref":"refs/tags/$ARTIFACT_VERSION", "sha": "$SHA_TAG"}'
-//     """
-// }
+    sh """
+        curl -X POST -H "Accept 'application/vnd.github.v3+json'" -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/DipDevOpsGrp5/ms-iclab/git/refs -d '{"ref":"refs/tags/$env.POM_VERSION", "sha": "$SHA_TAG"}'
+    """
+}
