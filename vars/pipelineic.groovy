@@ -52,7 +52,6 @@ def stageTest() {
     env.DESCRIPTION_STAGE = "Paso 2: Testear"
     stage("${env.DESCRIPTION_STAGE}"){
         env.STAGE = "test - ${env.DESCRIPTION_STAGE}"
-        sh "fail me"
         sh "echo  ${env.STAGE}"
         sh "mvn clean test -e"
     }
