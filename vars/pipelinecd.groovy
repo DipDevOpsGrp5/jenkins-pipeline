@@ -85,16 +85,16 @@ def stageMergeMain(){
 }
 
 def stageMergeDevelop(){
-    env.DESCRIPTION_STAGE = "Paso 4: Merge a develop"
+    env.DESCRIPTION_STAGE = "Paso 5: Merge a develop"
     stage("${env.DESCRIPTION_STAGE}"){
       env.STAGE = "merge_develop - ${env.DESCRIPTION_STAGE}"
       sh "echo  ${env.STAGE}"
-      mergeBranch("main")
+      mergeBranch("develop")
     }
 }
 
 def stageTagMain(){
-    env.DESCRIPTION_STAGE = "Paso 4: Tag main"
+    env.DESCRIPTION_STAGE = "Paso 6: Tag main"
     stage("${env.DESCRIPTION_STAGE}"){
       env.STAGE = "tag_main - ${env.DESCRIPTION_STAGE}"
       sh "echo  ${env.STAGE}"
